@@ -62,7 +62,7 @@ if(NOT CMAKE_SKIP_INSTALL_RULES)
 endif()
 
 # Enable testing
-if(RAZOR_BUILD_TESTS)
+if(BUILD_TESTING)
     include(CTest)
     add_subdirectory(tests)
 endif()
