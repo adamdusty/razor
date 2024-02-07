@@ -1,0 +1,1 @@
+option(RAZOR_BUILD_TESTS "Build tests for razor" OFF)
