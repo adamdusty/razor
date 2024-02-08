@@ -31,7 +31,10 @@ target_include_directories(
 )
 
 # Include and link dependencies
-#target_link_libraries(passionfruit_razor)
+target_link_libraries(passionfruit_razor
+    PUBLIC
+        passionfruit::echidna
+)
 
 # Add compile options
 add_dev_compile_opts(passionfruit_razor)

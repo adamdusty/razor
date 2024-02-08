@@ -1,5 +1,7 @@
-#include "passionfruit/razor.hpp"
+#include "razor/razor.hpp"
 
-namespace passionfruit {
-auto get_version() -> std::uint64_t{ return 1; }
+namespace passionfruit::razor {
+auto get_version() -> std::uint64_t {
+    return 1;
 }
+} // namespace passionfruit::razor
