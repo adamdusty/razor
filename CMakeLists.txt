@@ -20,6 +20,7 @@ add_library(passionfruit::razor ALIAS passionfruit_razor)
 # Add sources
 target_sources(passionfruit_razor PRIVATE
     src/razor.cpp
+    src/context.cpp
 )
 
 # Add include directory
@@ -30,10 +31,18 @@ target_include_directories(
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>"
 )
 
+# Import export.hpp
+target_include_directories(
+    passionfruit_razor SYSTEM
+    PUBLIC
+    "$<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>"
+)
+
 # Include and link dependencies
 target_link_libraries(passionfruit_razor
     PUBLIC
         passionfruit::echidna
+        passionfruit::seed
 )
 
 # Add compile options
@@ -44,7 +53,7 @@ include(GenerateExportHeader)
 generate_export_header(
     passionfruit_razor
     BASE_NAME razor
-    EXPORT_FILE_NAME include/passionfruit/export.hpp
+    EXPORT_FILE_NAME include/razor/export.hpp
     CUSTOM_CONTENT_FROM_VARIABLE pragma_suppress_c4251
 )
 

@@ -19,7 +19,6 @@ FetchContent_Declare(
     GIT_TAG        v1.2.4
     GIT_SHALLOW    TRUE
     SYSTEM
-    FIND_PACKAGE_ARGS # Use system package if installed
 )
 FetchContent_MakeAvailable(snitch)
 
@@ -32,7 +31,7 @@ target_sources(razor_tests PRIVATE
 )
 
 # Link libs
-target_link_libraries(razor_tests PRIVATE passionfruit::razor snitch::snitch)
+target_link_libraries(razor_tests PRIVATE passionfruit::razor passionfruit::echidna snitch::snitch)
 
 # Add test
 add_test(NAME razor_tests COMMAND razor_tests)
@@ -41,6 +40,6 @@ add_test(NAME razor_tests COMMAND razor_tests)
 if(BUILD_SHARED_LIBS)
     set_tests_properties(razor_tests PROPERTIES
         ENVIRONMENT_MODIFICATION
-            "PATH=path_list_append:$<TARGET_FILE_DIR:passionfruit::razor>;PATH=path_list_append:$<TARGET_FILE_DIR:snitch::snitch>"
+            "PATH=path_list_append:$<TARGET_FILE_DIR:passionfruit::razor>;PATH=path_list_append:$<TARGET_FILE_DIR:passionfruit::echidna>;;PATH=path_list_append:$<TARGET_FILE_DIR:wgpu>;PATH=path_list_append:$<TARGET_FILE_DIR:snitch::snitch>"
     )
 endif()

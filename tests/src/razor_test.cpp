@@ -1,6 +1,10 @@
+#include <razor/context.hpp>
 #include <razor/razor.hpp>
 #include <snitch/snitch.hpp>
 
-TEST_CASE("Test case", "[greeting]") {
-    REQUIRE(passionfruit::razor::get_version() == 1);
+using namespace passionfruit::razor;
+
+TEST_CASE("Create context", "[context]") {
+    // auto ctx = render_context::create();
+    // CHECK(ctx);
 }
