@@ -40,6 +40,6 @@ add_test(NAME razor_tests COMMAND razor_tests)
 if(BUILD_SHARED_LIBS)
     set_tests_properties(razor_tests PROPERTIES
         ENVIRONMENT_MODIFICATION
-            "PATH=path_list_append:$<TARGET_FILE_DIR:passionfruit::razor>;PATH=path_list_append:$<TARGET_FILE_DIR:passionfruit::echidna>;;PATH=path_list_append:$<TARGET_FILE_DIR:wgpu>;PATH=path_list_append:$<TARGET_FILE_DIR:snitch::snitch>"
+            "PATH=path_list_append:$<TARGET_FILE_DIR:passionfruit::seed>;PATH=path_list_append:$<TARGET_FILE_DIR:passionfruit::razor>;PATH=path_list_append:$<TARGET_FILE_DIR:passionfruit::echidna>;PATH=path_list_append:$<TARGET_FILE_DIR:wgpu>;PATH=path_list_append:$<TARGET_FILE_DIR:snitch::snitch>;PATH=path_list_append:$<TARGET_FILE_DIR:SDL2::SDL2>"
     )
 endif()
