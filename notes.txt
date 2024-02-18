@@ -1,0 +1,2 @@
+rendering interface
+auto render(view_)

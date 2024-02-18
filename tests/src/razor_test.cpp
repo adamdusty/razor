@@ -19,6 +19,7 @@ TEST_CASE("Create context", "[context]") {
     auto ctx = razor::render_context::create(*win);
 
     CHECK(ctx);
+
     CHECK(ctx->instance);
     CHECK(ctx->surface);
     CHECK(ctx->adapter);
