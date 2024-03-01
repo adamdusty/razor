@@ -2,6 +2,7 @@
 
 #include <bit>
 #include <echidna/echidna.hpp>
+#include <memory>
 #include <variant>
 #include <webgpu.h>
 
@@ -10,12 +11,31 @@ using nonstd::make_unexpected;
 
 namespace passionfruit::razor {
 
-struct window_visitor {
-    auto operator()(const seed::hwnd& win) -> WGPUSurfaceDescriptor {
-        auto sd = echidna::surface_descriptor_from_windows_hwnd(win.hinstance, win.hwnd);
-        return echidna::surface_descriptor(*std::bit_cast<WGPUChainedStruct*>(&sd), nullptr);
+struct surface_descriptor {
+    std::shared_ptr<void> platform_desc = nullptr;
+
+    auto get(const char* label = nullptr) -> WGPUSurfaceDescriptor {
+        return echidna::surface_descriptor(*std::bit_cast<WGPUChainedStruct*>(platform_desc.get()), label);
     }
-    auto operator()(const auto& /* window */) -> WGPUSurfaceDescriptor { throw; }
+};
+
+struct window_visitor {
+    auto operator()(const seed::hwnd& win) -> surface_descriptor {
+        auto sd = echidna::surface_descriptor_from_windows_hwnd(win.hinstance, win.hwnd);
+        return surface_descriptor{.platform_desc = std::make_shared<WGPUSurfaceDescriptorFromWindowsHWND>(sd)};
+    }
+
+    auto operator()(const seed::xlib_window& win) -> surface_descriptor {
+        auto sd = echidna::surface_descriptor_from_xlib_window(win.display, win.window);
+        return surface_descriptor{.platform_desc = std::make_shared<WGPUSurfaceDescriptorFromXlibWindow>(sd)};
+    }
+
+    auto operator()(const seed::wayland_surface& win) -> surface_descriptor {
+        auto sd = echidna::surface_descriptor_from_wayland_surface(win.display, win.surface);
+        return surface_descriptor{.platform_desc = std::make_shared<WGPUSurfaceDescriptorFromWaylandSurface>(sd)};
+    }
+
+    auto operator()(const auto& /* window */) -> surface_descriptor { throw; }
 };
 
 auto render_context::create(const seed::window& window) -> expected<render_context, context_creation_error> {
@@ -37,7 +57,7 @@ auto render_context::create(const seed::window& window) -> expected<render_conte
     // Create surface
     if(auto raw = window.platform_window()) {
         auto surf_desc = std::visit(window_visitor{}, *raw);
-        surface        = instance.create_surface(surf_desc);
+        surface        = instance.create_surface(surf_desc.get());
     } else {
         return nonstd::make_unexpected(
             context_creation_error{.type = context_creation_error::type::create_surface_error,

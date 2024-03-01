@@ -1,5 +1,6 @@
 #include <razor/context.hpp>
 #include <razor/razor.hpp>
+#include <seed/seed.hpp>
 #include <snitch/snitch.hpp>
 
 using namespace passionfruit;
